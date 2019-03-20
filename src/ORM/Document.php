@@ -74,6 +74,8 @@ class Document
             }
         }
 
-        return new Entity($document, ['markClean' => true, 'markNew' => false, 'source' => $this->_registryAlias]);
-    }
+        $inflector= new \Cake\Utility\Inflector();
+        $entityName='\\App\\Model\\Entity\\'.$inflector->singularize($this->_registryAlias);
+        
+        return new $entityName($document, ['markClean' => true, 'markNew' => false, 'source' => $this->_registryAlias]);    }
 }
