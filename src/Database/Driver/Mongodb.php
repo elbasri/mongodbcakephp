@@ -100,8 +100,8 @@ class Mongodb
     public function connect()
     {
         try {
-            if (($this->_config['ssh_user'] != '') && ($this->_config['ssh_host'])) { // Because a user is required for all of the SSH authentication functions.
-                if (intval($this->_config['ssh_port']) != 0) {
+            if (isset($this->_config['ssh_user']) && ($this->_config['ssh_user'] != '') && ($this->_config['ssh_host'])) { // Because a user is required for all of the SSH authentication functions.
+                if (isset($this->_config['ssh_port']) && intval($this->_config['ssh_port']) != 0) {
                     $port = $this->_config['ssh_port'];
                 } else {
                     $port = 22; // The default SSH port.
@@ -189,7 +189,12 @@ class Mongodb
         } else {
             $host .= $hostname;
         }
-
+        if (isset($this->_config['ssl'])) {
+            $host .= '?ssl=' . (($this->_config['ssl'] === true) ? 'true' : 'false');
+        }
+        if (!empty($this->_config['authSource'])) {
+            $host .= '&authSource=' . $this->_config['authSource'];
+        }
         return $host;
     }
 
